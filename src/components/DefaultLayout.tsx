@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import { ReactNode } from 'react';
+import { ThemeProvider } from 'styled-components';
+import theme from '~/styles/theme';
 
 type DefaultLayoutProps = { children: ReactNode };
 
@@ -10,8 +12,9 @@ export const DefaultLayout = ({ children }: DefaultLayoutProps) => {
         <title>Prisma Starter</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <main className="h-screen">{children}</main>
+      <ThemeProvider theme={theme}>
+        <main className="h-screen">{children}</main>
+      </ThemeProvider>
     </>
   );
 };
