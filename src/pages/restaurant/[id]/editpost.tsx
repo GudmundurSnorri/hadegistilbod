@@ -1,10 +1,10 @@
 import NextError from 'next/error';
 import { useRouter } from 'next/router';
+import { AdminLayout } from '~/components/Layouts/AdminLayout';
 
 import { NextPageWithLayout } from '~/pages/_app';
-import { RouterOutput, trpc } from '~/utils/trpc';
-
-type PostByIdOutput = RouterOutput['resturant']['byId'];
+import { H1 } from '~/styles/Text';
+import { trpc } from '~/utils/trpc';
 
 const PostViewPage: NextPageWithLayout = () => {
   const { query } = useRouter();
@@ -20,19 +20,13 @@ const PostViewPage: NextPageWithLayout = () => {
     );
   }
 
-  if (postQuery.status !== 'success') {
-    return (
-      <div className="flex flex-col justify-center h-full px-8 ">
-        <div className="w-full bg-zinc-900/70 rounded-md h-10 animate-pulse mb-2"></div>
-        <div className="w-2/6 bg-zinc-900/70 rounded-md h-5 animate-pulse mb-8"></div>
-
-        <div className="w-full bg-zinc-900/70 rounded-md h-40 animate-pulse"></div>
-      </div>
-    );
-  }
   const { data } = postQuery;
-  console.log(data);
-  return <div>hæ</div>;
+
+  return (
+    <AdminLayout>
+      <H1 mt={2}> hæ </H1>
+    </AdminLayout>
+  );
 };
 
 export default PostViewPage;
