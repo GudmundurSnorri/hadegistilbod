@@ -24,7 +24,7 @@ export const ResturantRouter = router({
   byId: publicProcedure
     .input(
       z.object({
-        id: z.number(),
+        id: z.string(),
       }),
     )
     .query(async ({ input }) => {

@@ -4,6 +4,7 @@ export enum COLORS {
 
 export enum SIZES {
   MAX_WIDTH = '1290px',
+  SIDEMENU_WIDTH = '300px',
 }
 
 const theme = {

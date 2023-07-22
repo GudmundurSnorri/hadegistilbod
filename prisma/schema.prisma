@@ -12,16 +12,20 @@ generator client {
 
 // Authentication and Session
 model User {
-  id          Int          @id @default(autoincrement())
-  email       String       @unique
-  password    String
-  name        String?
-  restaurants Restaurant[]
+  id            String       @id @default(cuid())
+  email         String       @unique
+  emailVerified DateTime?
+  password      String?
+  name          String?
+  image         String?
+  restaurants   Restaurant[]
+  sessions      Session[] // Changed the name from Session to sessions
+  Account       Account[]
 }
 
 // Companies
 model Company {
-  id          Int          @id @default(autoincrement())
+  id          String       @id @default(cuid())
   name        String
   email       String       @unique
   password    String
@@ -30,34 +34,72 @@ model Company {
 
 // Restaurants
 model Restaurant {
-  id          Int        @id @default(autoincrement())
+  id          String     @id @default(cuid())
   name        String
   description String?
   locations   Location[]
   offers      Offer[]
-  companyId   Int
+  companyId   String
   company     Company    @relation(fields: [companyId], references: [id])
-  User        User?      @relation(fields: [userId], references: [id])
-  userId      Int?
+  user        User?      @relation(fields: [userId], references: [id])
+  userId      String?
 }
 
 // Locations
 model Location {
-  id           Int        @id @default(autoincrement())
+  id           String     @id @default(cuid())
   name         String
   address      String
-  restaurantId Int
+  restaurantId String
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
   uniqueOffer  Boolean?   @default(false)
 }
 
 // Food Offers
 model Offer {
-  id                Int        @id @default(autoincrement())
+  id                String     @id @default(cuid())
   title             String
   description       String?
   price             Float
-  restaurantId      Int
+  restaurantId      String
   restaurant        Restaurant @relation(fields: [restaurantId], references: [id])
   uniqueLocationIds Int[]
+}
+
+// Add VerificationToken model for email verification
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Fix the expires field for Session model
+model Session {
+  id           String    @id @default(cuid())
+  sessionToken String    @unique
+  userId       String
+  expires      DateTime? // Make expires field optional
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Add Account model for third-party authentication
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? @db.Text
+  refresh_token_expires_in Int?
+  access_token             String? @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? @db.Text
+  session_state            String?
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
