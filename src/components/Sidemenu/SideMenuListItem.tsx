@@ -1,12 +1,15 @@
 import Link from 'next/link';
 import React from 'react';
 import {
+  AiOutlineAppstoreAdd,
   AiOutlineHome,
-  AiOutlineInfoCircle,
   AiOutlineProfile,
+  AiOutlineShop,
 } from 'react-icons/ai';
 import { Box } from '~/styles/';
 import { PSmallRegular } from '~/styles/Text';
+import { COLORS } from '~/styles/theme';
+import { ListItem } from './SideMenuListItem.styled';
 
 type SMLItem = {
   icon: React.ReactNode;
@@ -16,19 +19,24 @@ type SMLItem = {
 
 const data: SMLItem[] = [
   {
-    icon: <AiOutlineHome size={24} />,
+    icon: <AiOutlineHome size={20} />,
     title: 'Heim',
     url: '/hello',
   },
   {
-    icon: <AiOutlineProfile size={24} />,
-    title: 'Tilboð',
-    url: '/tilbod',
+    icon: <AiOutlineShop size={20} />,
+    title: 'Fyrirtæki',
+    url: '/fyrirtaeki',
   },
   {
-    icon: <AiOutlineInfoCircle size={24} />,
-    title: 'Upplýsingar',
-    url: '/upplysingar',
+    icon: <AiOutlineAppstoreAdd size={20} />,
+    title: 'Veitingastaðir',
+    url: '/restaurants',
+  },
+  {
+    icon: <AiOutlineProfile size={20} />,
+    title: 'Tilboð',
+    url: '/tilbod',
   },
 ];
 
@@ -40,12 +48,20 @@ const SideMenuListItem = () => {
         return (
           <Box mb={2}>
             <Link href={url}>
-              <Box display="flex" alignItems="center">
+              <ListItem
+                display="flex"
+                alignItems="center"
+                backgroundColor="transparent"
+                px={2}
+                py={1}
+                borderRadius="10px"
+                color={COLORS.GREY}
+              >
                 {icon}
-                <Box ml={2}>
+                <Box ml={2} color="grey">
                   <PSmallRegular>{title}</PSmallRegular>
                 </Box>
-              </Box>
+              </ListItem>
             </Link>
           </Box>
         );
@@ -58,7 +74,7 @@ type SMLWrapperProps = {
   children: React.ReactNode;
 };
 const SideMenuListWrapper = ({ children }: SMLWrapperProps) => (
-  <Box ml={4}>{children}</Box>
+  <Box>{children}</Box>
 );
 
 export { SideMenuListItem, SideMenuListWrapper };
