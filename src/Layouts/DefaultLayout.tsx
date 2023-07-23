@@ -2,6 +2,7 @@
 import Head from 'next/head';
 import { ReactNode } from 'react';
 import { ThemeProvider } from 'styled-components';
+import { Box } from '~/styles';
 import theme from '~/styles/theme';
 import StyledComponentsRegistry from '~/utils/registry';
 
@@ -15,6 +16,7 @@ export const DefaultLayout = ({ children }: DefaultLayoutProps) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ThemeProvider theme={theme}>
+        <Box>HELLO MOTO</Box>
         <main className="h-screen">{children}</main>
       </ThemeProvider>
     </StyledComponentsRegistry>

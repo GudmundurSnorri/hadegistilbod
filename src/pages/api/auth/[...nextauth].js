@@ -25,4 +25,9 @@ export const authOptions = {
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
   ...authOptions,
+  callbacks: {
+    session({ session, token, user }) {
+      return session; // The return type will match the one returned in `useSession()`
+    },
+  },
 });

@@ -2,6 +2,8 @@ import Box from '~/styles/Box';
 import { NextPageWithLayout } from './_app';
 import Link from 'next/link';
 import { COLORS } from '~/styles/theme';
+import { ReactElement } from 'react';
+import { DefaultLayout } from '~/Layouts/DefaultLayout';
 
 const IndexPage: NextPageWithLayout = () => {
   return (
@@ -27,7 +29,7 @@ const IndexPage: NextPageWithLayout = () => {
         </Link>
         .
       </p>
-      <Box mt={4} px={5} backgroundColor={COLORS.PINKTHEME} height={99}>
+      <Box mt={4} px={5} backgroundColor={COLORS.PINK} height={99}>
         hæ
       </Box>
     </div>
@@ -36,28 +38,10 @@ const IndexPage: NextPageWithLayout = () => {
 
 export default IndexPage;
 
-/**
- * If you want to statically render this page
- * - Export `appRouter` & `createContext` from [trpc].ts
- * - Make the `opts` object optional on `createContext()`
- *
- * @link https://trpc.io/docs/ssg
- */
-// export const getStaticProps = async (
-//   context: GetStaticPropsContext<{ filter: string }>,
-// ) => {
-//   const ssg = createServerSideHelpers({
-//     router: appRouter,
-//     ctx: await createContext(),
-//   });
-//
-//   await ssg.post.all.fetch();
-//
-//   return {
-//     props: {
-//       trpcState: ssg.dehydrate(),
-//       filter: context.params?.filter ?? 'all',
-//     },
-//     revalidate: 1,
-//   };
-// };
+IndexPage.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <DefaultLayout>
+      <IndexPage>{page}</IndexPage>
+    </DefaultLayout>
+  );
+};

@@ -3,9 +3,9 @@ import type { AppType, AppProps } from 'next/app';
 import type { ReactElement, ReactNode } from 'react';
 import { SessionProvider } from 'next-auth/react';
 
-import { DefaultLayout } from '~/Layouts/DefaultLayout';
 import { trpc } from '~/utils/trpc';
 import '~/styles/globals.css';
+import { Session } from 'next-auth';
 
 export type NextPageWithLayout<
   TProps = Record<string, unknown>,
@@ -14,23 +14,21 @@ export type NextPageWithLayout<
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
-type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
+type AppPropsWithLayout<P> = AppProps<P> & {
+  Component: NextPageWithLayout<P>;
 };
 
 const MyApp = (({
   Component,
-  pageProps: { session, ...pageProps },
-}: AppPropsWithLayout) => {
-  const getLayout =
-    Component.getLayout ??
-    ((page) => (
-      <SessionProvider session={session}>
-        <DefaultLayout>{page}</DefaultLayout>
-      </SessionProvider>
-    ));
+  pageProps: { ...pageProps },
+}: AppPropsWithLayout<{ session: Session }>) => {
+  const getLayout = Component.getLayout ?? ((page: any) => page);
 
-  return getLayout(<Component {...pageProps} />);
+  return (
+    <SessionProvider session={pageProps.session}>
+      {getLayout(<Component {...pageProps} />)}
+    </SessionProvider>
+  );
 }) as AppType;
 
 export default trpc.withTRPC(MyApp);
